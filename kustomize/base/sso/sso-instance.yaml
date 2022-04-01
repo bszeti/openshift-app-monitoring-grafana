@@ -1,0 +1,100 @@
+# Server
+apiVersion: keycloak.org/v1alpha1
+kind: Keycloak
+metadata:
+  name: sso
+  labels:
+    app: sso
+spec:
+  externalAccess:
+    enabled: true
+  instances: 2
+  extensions:
+  - https://github.com/aerogear/keycloak-metrics-spi/releases/download/2.5.3/keycloak-metrics-spi-2.5.3.jar
+  keycloakDeploymentSpec:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 750Mi
+      limits:
+        cpu: 1
+        memory: 1Gi
+  postgresDeploymentSpec:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 100Mi
+      limits:
+        cpu: 1
+        memory: 500Mi
+---
+# Realm
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakRealm
+metadata:
+  name: myrealm
+  labels:
+    realm: myrealm
+spec:
+  instanceSelector:
+    matchLabels:
+      app: sso
+  realm:
+    realm: myrealm
+    enabled: true
+    eventsListeners:
+    - jboss-logging
+    - metrics-listener
+---
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: artemis-broker
+spec:
+  realmSelector:
+     matchLabels:
+      realm: myrealm
+  client:
+    clientId: artemis-broker
+    enabled: true
+    publicClient: false
+    clientAuthenticatorType: client-secret
+    secret: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    fullScopeAllowed: true
+    directAccessGrantsEnabled: true
+    protocol: openid-connect
+    defaultClientScopes:
+      - web-origins
+      - role_list
+      - profile
+      - roles
+      - email
+    optionalClientScopes:
+      - address
+      - phone
+      - offline_access
+      - microprofile-jwt
+  roles:
+    - name: admin
+---
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakUser
+metadata:
+  name: admin
+spec:
+  realmSelector:
+    matchLabels:
+      realm: myrealm
+  user:
+    username: admin
+    enabled: true
+    firstName: AMQ
+    lastName: Admin
+    emailVerified: false
+    clientRoles:
+      artemis-broker:
+        - admin
+    credentials:
+      - type: password
+        value: secret
+

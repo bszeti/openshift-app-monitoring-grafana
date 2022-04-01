@@ -1,0 +1,46 @@
+# based on https://grafana.com/grafana/dashboards/9087
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: artemis
+  labels:
+    app: grafana
+    monitoring-key: middleware
+spec:
+  datasources:
+    - datasourceName: Prometheus
+      inputName: DS_PROMETHEUS
+  configMapRef:
+    name: grafana-dashboards
+    key: dashboard-artemis.json
+---
+# based on https://grafana.com/grafana/dashboards/7727
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: jmx
+  labels:
+    app: grafana
+    monitoring-key: middleware
+spec:
+  datasources:
+    - datasourceName: Prometheus
+      inputName: DS_PROMETHEUS
+  configMapRef:
+    name: grafana-dashboards
+    key: dashboard-jmx.json
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: keycloak
+  labels:
+    app: grafana
+    monitoring-key: middleware
+spec:
+  datasources:
+    - datasourceName: Prometheus
+      inputName: DS_PROMETHEUS
+  configMapRef:
+    name: grafana-dashboards
+    key: dashboard-keycloak.json
