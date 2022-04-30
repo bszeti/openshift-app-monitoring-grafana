@@ -9,6 +9,38 @@
       "pluginName": "Prometheus"
     }
   ],
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "gauge",
+      "name": "Gauge",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "7.5.15"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -26,8 +58,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 1,
-  "id": 10,
-  "iteration": 1647016564235,
+  "id": null,
+  "iteration": 1651252487415,
   "links": [],
   "panels": [
     {
@@ -411,7 +443,7 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
-        "w": 24,
+        "w": 12,
         "x": 0,
         "y": 6
       },
@@ -483,7 +515,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:44",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -492,7 +523,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:45",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -519,15 +549,14 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
-        "w": 24,
-        "x": 0,
-        "y": 14
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 6
       },
       "hiddenSeries": false,
       "id": 49,
       "legend": {
-        "alignAsTable": false,
         "avg": false,
         "current": false,
         "max": false,
@@ -555,7 +584,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(jboss_datasources_pool_xacommit_count{namespace=\"$namespace\", xa_data_source=\"keycloak_postgresql-DB\"}[5m])",
+          "expr": "increase(jboss_datasources_pool_xacommit_count{namespace=\"$namespace\", xa_data_source=\"keycloak_postgresql-DB\"}[30m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -564,7 +593,7 @@
         },
         {
           "exemplar": true,
-          "expr": "rate(jboss_datasources_pool_xarollback_count{namespace=\"$namespace\", xa_data_source=\"keycloak_postgresql-DB\"}[5m])",
+          "expr": "increase(jboss_datasources_pool_xarollback_count{namespace=\"$namespace\", xa_data_source=\"keycloak_postgresql-DB\"}[30m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -573,7 +602,7 @@
         },
         {
           "exemplar": true,
-          "expr": "rate(jboss_datasources_pool_blocking_failure_count{namespace=\"$namespace\", xa_data_source=\"keycloak_postgresql-DB\"}[5m])",
+          "expr": "increase(jboss_datasources_pool_blocking_failure_count{namespace=\"$namespace\", xa_data_source=\"keycloak_postgresql-DB\"}[30m])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -585,7 +614,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Number of transactions [5m]",
+      "title": "Number of transactions [30m]",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -601,7 +630,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:3233",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -610,7 +638,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:3234",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -640,7 +667,7 @@
         "h": 12,
         "w": 24,
         "x": 0,
-        "y": 23
+        "y": 14
       },
       "hiddenSeries": false,
       "id": 45,
@@ -650,7 +677,7 @@
         "current": true,
         "max": false,
         "min": false,
-        "rightSide": false,
+        "rightSide": true,
         "show": true,
         "total": false,
         "values": true
@@ -764,7 +791,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:1033",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -773,7 +799,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:1034",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -794,123 +819,12 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 35
+        "y": 26
       },
       "id": 33,
       "panels": [],
       "title": "Endpoints",
       "type": "row"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "cacheTimeout": null,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
-      "decimals": 0,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 13,
-        "w": 24,
-        "x": 0,
-        "y": 36
-      },
-      "hiddenSeries": false,
-      "id": 67,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": false,
-        "show": true,
-        "sort": "avg",
-        "sortDesc": true,
-        "total": true,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.5.15",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sum(rate(keycloak_request_duration_count{namespace=\"$namespace\"}[5m])) by (pod, method)\r\n",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{pod}} {{method}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "HTTP Requests [5m]",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:729",
-          "decimals": 0,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:730",
-          "format": "none",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
     },
     {
       "aliasColors": {},
@@ -930,7 +844,7 @@
         "h": 13,
         "w": 24,
         "x": 0,
-        "y": 49
+        "y": 27
       },
       "hiddenSeries": false,
       "id": 59,
@@ -940,7 +854,6 @@
         "current": false,
         "max": true,
         "min": true,
-        "rightSide": false,
         "show": true,
         "sort": "avg",
         "sortDesc": true,
@@ -966,7 +879,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(keycloak_request_duration_sum{namespace=\"$namespace\", job=\"keycloak\", resource=~\"realms,realms/myrealm/.+\"}[5m]) /rate(keycloak_request_duration_count{namespace=\"$namespace\", job=\"keycloak\", resource=~\"realms,realms/myrealm/.+\"}[5m])",
+          "expr": "rate(keycloak_request_duration_sum{namespace=\"$namespace\", job=\"keycloak\", resource=~\"realms,realms/myrealm/.+\"}[30m]) /rate(keycloak_request_duration_count{namespace=\"$namespace\", job=\"keycloak\", resource=~\"realms,realms/myrealm/.+\"}[30m])",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -980,7 +893,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Realm myrealm HTTP endpoints [5m]",
+      "title": "Realm myrealm HTTP endpoints [30m]",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -996,7 +909,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:729",
           "format": "ms",
           "label": null,
           "logBase": 1,
@@ -1005,7 +917,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:730",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1026,7 +937,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 62
+        "y": 40
       },
       "id": 35,
       "panels": [],
@@ -1049,7 +960,7 @@
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 63
+        "y": 41
       },
       "hiddenSeries": false,
       "hideTimeOverride": false,
@@ -1124,7 +1035,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:648",
           "decimals": null,
           "format": "bytes",
           "label": "",
@@ -1134,7 +1044,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:649",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1164,7 +1073,7 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 63
+        "y": 41
       },
       "hiddenSeries": false,
       "id": 31,
@@ -1243,7 +1152,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:496",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1252,7 +1160,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:497",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1283,7 +1190,7 @@
         "h": 11,
         "w": 12,
         "x": 0,
-        "y": 75
+        "y": 53
       },
       "hiddenSeries": false,
       "id": 38,
@@ -1344,7 +1251,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:2407",
           "format": "s",
           "label": null,
           "logBase": 1,
@@ -1353,7 +1259,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:2408",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1384,7 +1289,7 @@
         "h": 11,
         "w": 12,
         "x": 12,
-        "y": 75
+        "y": 53
       },
       "hiddenSeries": false,
       "id": 37,
@@ -1445,7 +1350,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:787",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1454,7 +1358,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:788",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1485,7 +1388,7 @@
         "h": 15,
         "w": 12,
         "x": 0,
-        "y": 86
+        "y": 64
       },
       "hiddenSeries": false,
       "id": 50,
@@ -1564,7 +1467,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:548",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1573,7 +1475,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:549",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1603,7 +1504,7 @@
         "h": 15,
         "w": 12,
         "x": 12,
-        "y": 86
+        "y": 64
       },
       "hiddenSeries": false,
       "hideTimeOverride": false,
@@ -1692,7 +1593,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:600",
           "decimals": null,
           "format": "bytes",
           "label": "",
@@ -1702,7 +1602,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:601",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1727,6 +1626,7 @@
     "list": [
       {
         "allValue": null,
+        "current": {},
         "datasource": "${DS_PROMETHEUS}",
         "definition": "label_values(keycloak_request_duration_count,namespace)",
         "description": null,
@@ -1754,7 +1654,7 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {
@@ -1785,6 +1685,6 @@
   },
   "timezone": "",
   "title": "Keycloak Metrics",
-  "uid": "keycloak-metrics",
-  "version": 24
+  "uid": "keycloak-spi",
+  "version": 1
 }
