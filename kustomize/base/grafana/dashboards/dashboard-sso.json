@@ -1684,7 +1684,7 @@
     ]
   },
   "timezone": "",
-  "title": "Keycloak Metrics",
+  "title": "SSO Metrics",
   "uid": "keycloak-spi",
   "version": 1
 }
