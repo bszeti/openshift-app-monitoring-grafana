@@ -17,11 +17,11 @@ spec:
       name: Prometheus
       secureJsonData:
         httpHeaderValue1: >-
-          Bearer [use grafana-serviceaccount token]
+          Bearer [use grafana-thanos token]
       type: prometheus
       version: 1
       # Cluster scoped
       url: 'https://thanos-querier.openshift-monitoring.svc.cluster.local:9091'
-      # Namespaced scoped - requires customQueryParameters: namespace=mynamespace
+      # Namespaced scoped - requires 'customQueryParameters: namespace=mynamespace' above
       # url: 'https://thanos-querier.openshift-monitoring.svc.cluster.local:9092'
   name: grafana-datasource.yaml

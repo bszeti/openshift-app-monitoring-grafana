@@ -1,3 +1,6 @@
+# Enable User Workload Monitoring - https://docs.openshift.com/container-platform/4.11/monitoring/enabling-monitoring-for-user-defined-projects.html
+oc apply -k kustomize/env/openshift-monitoring
+
 # Create grafana-monitoring namespace and install Grafana and operator
 oc apply -k kustomize/env/grafana-monitoring-operator
 

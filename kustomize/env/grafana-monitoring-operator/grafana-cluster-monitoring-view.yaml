@@ -9,4 +9,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: grafana-thanos
-  namespace: grafana-monitoring
+  # namespace: grafana-monitoring

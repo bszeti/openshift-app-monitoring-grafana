@@ -33,7 +33,8 @@ spec:
 apiVersion: integreatly.org/v1alpha1
 kind: GrafanaDashboard
 metadata:
-  name: keycloak
+  # The SSO operator creates a GrafanaDashboard "keycloak", so we need to use a different name
+  name: sso
   labels:
     app: grafana
     monitoring-key: middleware
@@ -43,4 +44,4 @@ spec:
       inputName: DS_PROMETHEUS
   configMapRef:
     name: grafana-dashboards
-    key: dashboard-keycloak.json
+    key: dashboard-sso.json

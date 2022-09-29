@@ -7,9 +7,6 @@ resources:
 # - grafana-readonly.yaml
 - grafana-admin.yaml
 - grafana-datasource.yaml
-# - grafana-dashboard-amq.yaml
-# - grafana-dashboard-jmx.yaml
-# - grafana-dashboard-sso.yaml
 - grafana-dashboards.yaml
 
 configMapGenerator:
@@ -17,7 +14,7 @@ configMapGenerator:
   files:
   - dashboard-artemis.json
   - dashboard-jmx.json
-  - dashboard-keycloak.json
+  - dashboard-sso.json
 generatorOptions:
   disableNameSuffixHash: true
   
