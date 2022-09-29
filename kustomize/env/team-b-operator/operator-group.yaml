@@ -4,4 +4,4 @@ metadata:
   name: self
 spec:
   targetNamespaces:
-  - sso-2
+  - team-b

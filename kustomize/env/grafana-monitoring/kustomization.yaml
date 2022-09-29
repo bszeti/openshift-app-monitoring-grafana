@@ -4,7 +4,8 @@ kind: Kustomization
 namespace: grafana-monitoring
 
 resources:
-- ../../base/grafana
+- ../../base/grafana/instance
+- ../../base/grafana/dashboards
 
 patches:
 - target:
@@ -15,3 +16,10 @@ patches:
     - op: replace
       path: /spec/datasources/0/secureJsonData/httpHeaderValue1
       value: Bearer eyJhbGciO...
+- target:
+    kind: Grafana
+    name: grafana
+  patch: |-
+    - op: add
+      path: /spec/containers/0/args/-
+      value: '-openshift-sar={"resource": "services", "verb": "get", "namespace":"grafana-monitoring"}'

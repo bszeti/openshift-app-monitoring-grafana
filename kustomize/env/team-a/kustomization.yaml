@@ -1,10 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: sso-1
+namespace: team-a
 
 resources:
-- ../../base/grafana
+- ../../base/sso/instance
+- ../../base/grafana/instance
+- ../../base/grafana/dashboards
 
 patches:
 - target:
@@ -17,7 +19,14 @@ patches:
       value: https://thanos-querier.openshift-monitoring.svc.cluster.local:9092
     - op: add
       path: /spec/datasources/0/jsonData/customQueryParameters
-      value: namespace=sso-1
+      value: namespace=team-a
     - op: replace
       path: /spec/datasources/0/secureJsonData/httpHeaderValue1
       value: Bearer eyJhbGci...
+- target:
+    kind: Grafana
+    name: grafana
+  patch: |-
+    - op: add
+      path: /spec/containers/0/args/-
+      value: '-openshift-sar={"resource": "services", "verb": "get", "namespace":"team-a"}'

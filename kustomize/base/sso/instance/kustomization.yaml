@@ -4,4 +4,3 @@ kind: Kustomization
 resources:
 - users-secret.yaml
 - sso-instance.yaml
-- sso-operator.yaml
