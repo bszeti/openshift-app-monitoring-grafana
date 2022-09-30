@@ -6,4 +6,5 @@ namespace: team-b
 resources:
 - ../../base/grafana/operator
 - ../../base/sso/operator
+- ../../base/amq/operator
 - grafana-rolebinding.yaml

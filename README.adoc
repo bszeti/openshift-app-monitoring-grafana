@@ -61,7 +61,7 @@ oc apply -k kustomize/env/team-b-namespace
 [NOTE]
 At this point we can switch to "user1" to manage "team-a" and "user2" for "team-b" as cluster-scoped permissions are not needed to install operators and deploy Grafana with namespace-scoped access to metrics. This means that application teams in an enterprise environment can deploy this solution in their own namespaces without assistance required from cluster admins.
 
-Deploy Grafana and our application to monitor (using Red Hat SSO in this example for demonstration purposes):
+Deploy Grafana and our application to monitor (using Red Hat SSO and AMQ Broker in this example for demonstration purposes):
 
 ```
 oc apply -k kustomize/env/team-a-operators

@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: broker
+spec:
+  endpoints:
+    - interval: 15s
+      port: wconsj-.*
+      # scheme: https
+      # tlsConfig:
+      #   insecureSkipVerify: true
+  podTargetLabels:
+    - ActiveMQArtemis
+    - application
+  selector:
+    matchLabels:
+      ActiveMQArtemis: broker
+  jobLabel: ActiveMQArtemis

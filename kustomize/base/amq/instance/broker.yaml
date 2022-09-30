@@ -1,0 +1,40 @@
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemis
+metadata:
+  name: broker
+spec:
+  upgrades:
+    enabled: true
+    minor: true
+  version: 7.10.0
+  adminUser: admin
+  adminPassword: admin
+  acceptors:
+    - name: ssl
+      # expose: true
+      port: 61617
+      protocols: amqp,core
+      # sslEnabled: true
+      # sslSecret: amq-broker-ssl-acceptor
+      suppressInternalManagementObjects: true
+  console:
+    expose: true
+    # sslEnabled: true
+    # sslSecret: amq-broker-ssl-console
+  deploymentPlan:
+    image: placeholder
+    persistenceEnabled: true
+    enableMetricsPlugin: true
+    requireLogin: true
+    livenessProbe:
+      initialDelaySeconds: 240
+    size: 2
+    resources:
+      requests:
+        cpu: 50m
+        memory: 512Mi
+      limits:
+        cpu: "1"
+        memory: 2Gi
+  brokerProperties:
+    - globalMaxSize=100m
