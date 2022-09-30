@@ -6,6 +6,5 @@ namespace: team-b
 resources:
 - namespace.yaml
 - operator-group.yaml
-- grafana-rolebinding.yaml
-- ../../base/grafana/operator
-- ../../base/sso/operator
+- access.yaml
+

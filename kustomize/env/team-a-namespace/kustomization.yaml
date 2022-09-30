@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: team-a
 
 resources:
-- ../../base/grafana/operator
-- ../../base/sso/operator
-- grafana-rolebinding.yaml
+- namespace.yaml
+- operator-group.yaml
+- access.yaml
+
