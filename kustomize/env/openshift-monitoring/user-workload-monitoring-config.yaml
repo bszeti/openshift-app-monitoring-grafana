@@ -14,8 +14,13 @@ data:
         limits:
           cpu: "1" 
           memory: 1Gi
+      # volumeClaimTemplate:
+      #   spec:
+      #     resources:
+      #       requests:
+      #         storage: 5Gi
     thanosRuler:
-      retention: 15d
+      retention: 1d
       resources:
         requests:
           cpu: 50m 
@@ -23,8 +28,8 @@ data:
         limits:
           cpu: "1" 
           memory: 1Gi
-      volumeClaimTemplate:
-        spec:
-          resources:
-            requests:
-              storage: 5Gi
+      # volumeClaimTemplate:
+      #   spec:
+      #     resources:
+      #       requests:
+      #         storage: 3Gi

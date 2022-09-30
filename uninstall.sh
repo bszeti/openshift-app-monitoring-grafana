@@ -3,7 +3,7 @@ oc delete -k kustomize/env/team-a-workload
 oc delete -k kustomize/env/team-a-operators
 oc delete -k kustomize/env/team-b-workload
 oc delete -k kustomize/env/team-b-operators
-wait 10
+sleep 10
 oc delete -k kustomize/env/team-a-namespace
 oc delete -k kustomize/env/team-b-namespace
 

@@ -6,3 +6,10 @@ metadata:
 data:
   config.yaml: |
     enableUserWorkload: true
+    prometheusK8s:
+      retention: 4h
+      # volumeClaimTemplate:
+      #   spec:
+      #     resources:
+      #       requests:
+      #         storage: 5Gi

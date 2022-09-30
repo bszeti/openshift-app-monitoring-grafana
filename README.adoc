@@ -1,0 +1,102 @@
+= OpenShift User Workload Monitoring with Grafana
+
+== Overview
+
+OpenShift comes with a https://docs.openshift.com/container-platform/4.11/monitoring/monitoring-overview.html[User Workload Monitoring] feature that can be used to collect _Prometheus_ metrics directly from deployed applications, similarly how metrics are collected from the platform itself. Platform and user metrics can both be queried through a joint Thanos Querier endpoint that's also exposed by a Route.
+
+The default _Observe_ section of the OpenShift UI provides dashboards for the platform metrics, but user metrics can only be queried by _PromQL_ queries. This example shows how to use _Grafana_ to access these metrics and use them on dashbards.
+
+There are two different ways to access these metrics:
+
+- Deploy a cluster-scoped Grafana that can access metrics from the whole cluster - cluster-admin pemission is required
+- Deploy namespace-scoped Grafana instances that can access metrics for one namespace only - permission to the namespace is enough
+
+[NOTE]
+Minimum OpenShift v4.10 is required for the Grafana dashboards with variables based on `label_values()`, the related api endpoints are not enabled in earlier versions.
+
+== Installation
+
+=== Enable User Workload Monitoring
+
+First we need to https://docs.openshift.com/container-platform/4.11/monitoring/enabling-monitoring-for-user-defined-projects.html[enable] User Workload Monitoring by creating the related link:kustomize/env/openshift-monitoring[ConfigMaps].
+
+```
+oc apply -k kustomize/env/openshift-monitoring
+```
+
+=== Deploy a cluster-scoped Grafana
+
+Deploy a Grafana in `grafana-monitoring` namespace. Create a _ServiceAccount_ (`grafana-thanos`) that has cluster-scoped `cluster-monitoring-view` permission (_ClusterRoleBinding_) and add its token as `Bearer` header in the _GrafanaDatasource_.
+
+```
+oc apply -k kustomize/env/grafana-monitoring-operator
+
+SATOKEN=`oc sa get-token grafana-thanos -n grafana-monitoring`
+sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/grafana-monitoring/kustomization.yaml
+oc apply -k kustomize/env/grafana-monitoring
+```
+
+Note:
+
+- This _GrafanaDatasource_ connects to endpoint `thanos-querier.openshift-monitoring.svc.cluster.local` on port *9091*, that requires cluster-scoped `cluster-monitoring-view` permission (for the _ServiceAccount_)
+- The _ServiceAccount_ token is added in _GrafanaDatasource_ as:
+  
+  ```
+    secureJsonData:
+      httpHeaderValue1: >-
+        Bearer [use grafana-thanos token]
+  ```
+
+- Access to Grafana UI requires cluster scoped permission by setting `-openshift-sar={"resource": "namespaces", "verb": "get"}`. This could be less restrictive and changed to let login anyone with access to the `grafana-monitoring` namespace by setting something like `-openshift-sar={"resource": "services", "verb": "get", "namespace":"grafana-monitoring"}`
+
+=== Deploy team specific namespaces
+
+Create namespaces `team-a` and `team-b` with an _OperatorGroup_ to enable operator installation and give `admin` permissions to "user1" and "user2":
+
+```
+oc apply -k kustomize/env/team-a-namespace
+oc apply -k kustomize/env/team-b-namespace
+```
+
+[NOTE]
+At this point we can switch to "user1" to manage "team-a" and "user2" for "team-b" as cluster-scoped permissions are not needed to install operators and deploy Grafana with namespace-scoped access to metrics. This means that application teams in an enterprise environment can deploy this solution in their own namespaces without assistance required from cluster admins.
+
+Deploy Grafana and our application to monitor (using Red Hat SSO in this example for demonstration purposes):
+
+```
+oc apply -k kustomize/env/team-a-operators
+
+SATOKEN=`oc sa get-token grafana-thanos -n team-a`
+sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/team-a-workload/kustomization.yaml
+oc apply -k kustomize/env/team-a-workload
+```
+
+And similarly for `team-b`:
+
+```
+oc apply -k kustomize/env/team-b-operators
+
+SATOKEN=`oc sa get-token grafana-thanos -n team-b`
+sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/team-b-workload/kustomization.yaml
+oc apply -k kustomize/env/team-b-workload
+```
+
+Note:
+
+- These _GrafanaDatasources_ connect to endpoint `thanos-querier.openshift-monitoring.svc.cluster.local` on port *9092*, that requires only namespace scoped permission (for the _ServiceAccount_)
+- But this endpoint also requires a matching `namespace=team-a` criteria in every Promtheus query and lookup, so we need to add `customQueryParameters: namespace=team-a`, so it's automatically added to the sent queries. (Though we actually have "namespace" filter in our queries used on the dashboards in this example)
+- The `Bearer` token used belongs to the _ServiceAccount_ having only namespace scoped `view` permission (_RoleBinding_)
+- Grafana UI requires only namespace scoped access to login: `-openshift-sar={"resource": "services", "verb": "get", "namespace":"team-a"}`
+
+== Grafana 
+
+Open the URL of created Grafana Routes (run `oc get route -ojsonpath='{$.spec.host}' grafana-route`) in all three namespaces and access one of the three deployed dashboard (AMQ, JMX, SSO):
+
+- grafana-monitoring: Both namespaces shows up in the _Namespace_ selector, but needs cluster level permission to login
+- team-a: Only metrics from namespace "team-a" shows up, but _user1_ can login
+- team-b: Only metrics from namespace "team-b" shows up, but _user2_ can login
+
+
+== Additional links
+
+Related blog: https://cloud.redhat.com/blog/thanos-querier-versus-thanos-querier

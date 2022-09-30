@@ -22,4 +22,4 @@ patches:
   patch: |-
     - op: add
       path: /spec/containers/0/args/-
-      value: '-openshift-sar={"resource": "services", "verb": "get", "namespace":"grafana-monitoring"}'
+      value: '-openshift-sar={"resource": "namespaces", "verb": "get"}'
