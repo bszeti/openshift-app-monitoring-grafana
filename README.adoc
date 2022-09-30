@@ -24,6 +24,16 @@ First we need to https://docs.openshift.com/container-platform/4.11/monitoring/e
 oc apply -k kustomize/env/openshift-monitoring
 ```
 
+To test that user workload monitoring is up and running try to hit the internal or external endpoint:
+
+```
+# From outside the cluster - HTTP 401 Unauthorized is expected
+curl -vk 'https://federate-openshift-user-workload-monitoring.apps.[cluster domain]/federate'
+
+# From a Pod inside the cluster - HTTP 401 Unauthorized is expected
+curl -vk 'https://prometheus-user-workload.openshift-user-workload-monitoring.svc:9092/federate'
+```
+
 === Deploy a cluster-scoped Grafana
 
 Deploy a Grafana in `grafana-monitoring` namespace. Create a _ServiceAccount_ (`grafana-thanos`) that has cluster-scoped `cluster-monitoring-view` permission (_ClusterRoleBinding_) and add its token as `Bearer` header in the _GrafanaDatasource_.
@@ -97,6 +107,24 @@ Open the URL of created Grafana Routes (run `oc get route -ojsonpath='{$.spec.ho
 - team-b: Only metrics from namespace "team-b" shows up, but _user2_ can login
 
 
-== Additional links
+== Additional info
 
 Related blog: https://cloud.redhat.com/blog/thanos-querier-versus-thanos-querier
+
+To see the difference between the thanos-querier endpoints on port 9091 and 9092 we can run some curl commands. Port 9091 is exposed by a Route, for 9092 we can do port-forward:
+
+```
+BEARER_CLUSTER="$(oc sa get-token -n grafana-monitoring grafana-thanos)"
+BEARER_TEAMA="$(oc sa get-token -n team-a grafana-thanos)"
+BEARER_TEAMB="$(oc sa get-token -n team-b grafana-thanos)"
+
+# Cluster scoped endpoint
+curl -vk -H "Authorization: Bearer $BEARER_CLUSTER" 'https://thanos-querier-openshift-monitoring.apps.[cluster domain]/api/v1/query?query=up'
+
+# Namespace scoped endpoint - the "namespace" filter is required
+oc port-forward -n openshift-monitoring service/thanos-querier 9092 9092
+curl -vk -H "Authorization: Bearer $BEARER_TEAMA" 'https://localhost:9092/api/v1/query?query=up&namespace=team-a'
+curl -vk -H "Authorization: Bearer $BEARER_TEAMB" 'https://localhost:9092/api/v1/query?query=up&namespace=team-b'
+```
+
+Instead of a _ServiceAccount_ token we can also use our own user token (`oc whoami -t`) as Bearer header.
