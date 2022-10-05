@@ -46,6 +46,9 @@ sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/grafana-monitoring/kustom
 oc apply -k kustomize/env/grafana-monitoring
 ```
 
+[NOTE]
+In OpenShift v4.11 `oc get-token` is deprected. Use `oc create token grafana-thanos --duration=9000h -n grafana-monitoring`  or `oc extract -n grafana-monitoring $(oc get secret -oname -n grafana-monitoring | grep grafana-thanos-token) --keys=token --to=-`
+
 Note:
 
 - This _GrafanaDatasource_ connects to endpoint `thanos-querier.openshift-monitoring.svc.cluster.local` on port *9091*, that requires cluster-scoped `cluster-monitoring-view` permission (for the _ServiceAccount_)

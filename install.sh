@@ -6,6 +6,8 @@ oc apply -k kustomize/env/grafana-monitoring-operator
 
 # Create Grafana instance in grafana-monitoring namespace
 SATOKEN=`oc sa get-token grafana-thanos -n grafana-monitoring`
+# Use this in OCP v4.11 instead
+# SATOKEN=`oc create token grafana-thanos --duration=9000h -n grafana-monitoring`
 sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/grafana-monitoring/kustomization.yaml
 oc apply -k kustomize/env/grafana-monitoring
 
@@ -19,6 +21,8 @@ oc apply -k kustomize/env/team-b-namespace
 oc apply -k kustomize/env/team-a-operators
 
 SATOKEN=`oc sa get-token grafana-thanos -n team-a`
+# Use this in OCP v4.11 instead
+# SATOKEN=`oc create token grafana-thanos --duration=9000h -n team-a`
 sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/team-a-workload/kustomization.yaml
 oc apply -k kustomize/env/team-a-workload
 
@@ -28,5 +32,7 @@ oc apply -k kustomize/env/team-a-workload
 oc apply -k kustomize/env/team-b-operators
 
 SATOKEN=`oc sa get-token grafana-thanos -n team-b`
+# Use this in OCP v4.11 instead
+# SATOKEN=`oc create token grafana-thanos --duration=9000h -n team-b`
 sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/team-b-workload/kustomization.yaml
 oc apply -k kustomize/env/team-b-workload
