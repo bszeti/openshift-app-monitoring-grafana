@@ -64,7 +64,7 @@ Note:
 
 === Deploy team specific namespaces
 
-Create namespaces `team-a` and `team-b` with an _OperatorGroup_ to enable operator installation and give `admin` permissions to "user1" and "user2":
+Create namespaces `team-a` and `team-b` with an _OperatorGroup_ to enable operator installation and give `admin` and `monitoring-edit` permissions to "user1" and "user2":
 
 ```
 oc apply -k kustomize/env/team-a-namespace
