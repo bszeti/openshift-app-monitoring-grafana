@@ -5,6 +5,7 @@ metadata:
   name: alert-notifications
 spec:
   route:
+    # Default receiver is required - causes error in prometheus-operator. It's also the receiver for sub-routes if it's not overwritten.
     receiver: default
     # Wait before sending first
     # groupWait: 30s
@@ -16,18 +17,20 @@ spec:
     # repeatInterval: 4h
     repeatInterval: 1m
     routes:
+      # The default route/receiver is only used when no sub-route was matched - even if all had "continue:true"
       - receiver: sub1
         matchers:
           - name: severity
-          #   matchType: '='
+            matchType: '='
             value: critical
         continue: true
       - receiver: sub2
         repeatInterval: 3m
         matchers:
           - name: app
-          #   matchType: '='
+            matchType: '='
             value: amq
+        continue: true
   receivers:
     - name: default
       webhookConfigs:
