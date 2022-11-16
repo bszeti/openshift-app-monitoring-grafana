@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
 - broker.yaml
 - servicemonitor.yaml
+- alerts.yaml

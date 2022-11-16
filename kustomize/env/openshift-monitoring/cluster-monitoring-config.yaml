@@ -13,3 +13,5 @@ data:
       #     resources:
       #       requests:
       #         storage: 5Gi
+    alertmanagerMain:
+      enableUserAlertmanagerConfig: true

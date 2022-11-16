@@ -1,0 +1,43 @@
+# How to send notifications
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: alert-notifications
+spec:
+  route:
+    receiver: default
+    # Wait before sending first
+    # groupWait: 30s
+    groupWait: 5s
+    # Min wait time between sending - if there were changes in alert status
+    # groupInterval: 5m
+    groupInterval: 30s
+    # Wait time before repeating - if there were no changes in alert status
+    # repeatInterval: 4h
+    repeatInterval: 1m
+    routes:
+      - receiver: sub1
+        matchers:
+          - name: severity
+          #   matchType: '='
+            value: critical
+        continue: true
+      - receiver: sub2
+        repeatInterval: 3m
+        matchers:
+          - name: app
+          #   matchType: '='
+            value: amq
+  receivers:
+    - name: default
+      webhookConfigs:
+        # https://requestbin.com/r/enixp86lo2g2/
+        - url: https://enixp86lo2g2.x.pipedream.net/
+    - name: sub1
+      webhookConfigs:
+        # https://requestbin.com/r/enflqc06gmfu8
+        - url: https://enflqc06gmfu8.x.pipedream.net/
+    - name: sub2
+      webhookConfigs:
+        # https://requestbin.com/r/enfiu0plafpkq
+        - url: https://enfiu0plafpkq.x.pipedream.net/

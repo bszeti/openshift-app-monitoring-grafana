@@ -1,0 +1,24 @@
+# How to send notifications
+apiVersion: monitoring.coreos.com/v1alpha1
+# OpenShift 4.11
+# apiVersion: monitoring.coreos.com/v1beta1
+kind: AlertmanagerConfig
+metadata:
+  name: alert-notifications
+spec:
+  route:
+    receiver: default
+    # Wait before sending first
+    # groupWait: 30s
+    groupWait: 5s
+    # Min wait time between sending - if there were changes in alert status
+    # groupInterval: 5m
+    groupInterval: 30s
+    # Wait time before repeating - if there were no changes in alert status
+    # repeatInterval: 1h
+    repeatInterval: 10m
+  receivers:
+  - name: default
+    webhookConfigs:
+    # https://requestbin.com/r/enixp86lo2g2/2HFTeVekRSAlrJtkNKKN8r4o7Kp
+    - url: https://enixp86lo2g2.x.pipedream.net/

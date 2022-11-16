@@ -1,0 +1,31 @@
+# Alert - Can use Platform and User metrics too
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: amq
+spec:
+  groups:
+    - name: general.rules
+      # interval: 15s
+      rules:
+        - alert: ArtemisMessageCountSum
+          expr: sum by (pod) (artemis_message_count) > 0
+          for: 1m
+          labels:
+            # namespace is automatically added
+            severity: warning
+            app: amq
+          annotations:
+            summary: Total message count is high
+            description: Broker {{ $labels.pod }} - Total message count is high
+            message: Total message count is {{ $value }}
+        - alert: ArtemisMessageCountExpiryOrDLQ
+          expr: artemis_message_count{queue=~'ExpiryQueue|DLQ'} > 0
+          labels:
+            severity: critical
+            app: amq
+          annotations:
+            summary: Messages on {{ $labels.queue }} queue
+            description: Broker {{ $labels.pod }} - Messages on {{ $labels.queue }}
+            message: Messages count on {{ $labels.queue }} is {{ $value }}
+
