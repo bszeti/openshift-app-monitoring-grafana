@@ -102,7 +102,7 @@ Note:
 - Grafana UI requires only namespace scoped access to login: `-openshift-sar={"resource": "services", "verb": "get", "namespace":"team-a"}`
 
 [NOTE]
-If you have `NetworkPolicy` in your application namespaces, make sure incoming traffic from namespace `openshift-user-workload-monitoring` is enabled.
+If you have `NetworkPolicy` in your application namespaces, make sure incoming traffic from namespace `openshift-user-workload-monitoring` is link:kustomize/env/team-a-namespace/networkpolicy.yaml[enabled].
 
 == Grafana 
 
