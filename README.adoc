@@ -138,7 +138,7 @@ Instead of a _ServiceAccount_ token we can also use our own user token (`oc whoa
 
 == Alerting
 
-[NOTE]
+[pass]
 The alerting related configuration was actually deployed by the scripts we run above, but this section describes the details around our custom alerts.
 
 === Alerting Rules
@@ -157,7 +157,7 @@ For details about rules see https://docs.openshift.com/container-platform/4.11/r
 [NOTE]
 The `namespace` filter is automatically added to all metrics used in the expressions, which makes the _PrometheusRule_ resources usable in any namespaces, alerts will be based only on metrics coming from that namespace. The `namespace` (and `alertname`) label is also automatically added to the alerts when they fire, so alerts can be grouped by namespace for receivers.
 
-ClusterRole `monitoring-rules-edit` is required in the namespace to create _PrometheusRules_. 
+ClusterRole `monitoring-edit` or `monitoring-rules-edit` is required in the namespace to create _PrometheusRules_. 
 
 === Notifications
 
