@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: grafana-thanos
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: grafanadatasources.integreatly.org-v1alpha1-admin
+subjects:
+  - kind: ServiceAccount
+    name: grafana-thanos
