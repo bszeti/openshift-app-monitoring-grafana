@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- dashboards-ocp410.yaml
+# - dashboards-ocp411.yaml
+- grafana-dashboards-openshift.yaml

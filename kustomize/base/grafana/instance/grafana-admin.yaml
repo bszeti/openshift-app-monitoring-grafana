@@ -3,6 +3,7 @@ kind: Grafana
 metadata:
   name: grafana
 spec:
+  # baseImage: docker.io/grafana/grafana:8.5.15
   config:
     log:
       mode: "console"
@@ -40,7 +41,7 @@ spec:
         - '-openshift-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt'
         - '-openshift-ca=/etc/grafana-configmaps/ocp-injected-certs/ca-bundle.crt'
         - '-skip-auth-regex=^/metrics'
-      image: 'quay.io/openshift/origin-oauth-proxy:4.9'
+      image: 'quay.io/openshift/origin-oauth-proxy:4.10'
       name: grafana-proxy
       ports:
         - containerPort: 9091
@@ -91,4 +92,4 @@ spec:
       serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"grafana-route"}}'
   dashboardLabelSelector:
     - matchExpressions:
-        - { key: "monitoring-key", operator: In, values: ['middleware'] }
+        - { key: "monitoring-key", operator: In, values: ['middleware','openshift'] }

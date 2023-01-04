@@ -15,7 +15,7 @@ spec:
     groupInterval: 30s
     # Wait time before repeating - if there were no changes in alert status
     # repeatInterval: 4h
-    repeatInterval: 1m
+    repeatInterval: 10m
     routes:
       # The default route/receiver is only used when no sub-route was matched - even if all had "continue:true"
       - receiver: sub1

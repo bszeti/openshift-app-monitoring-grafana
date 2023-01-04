@@ -1,0 +1,157 @@
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-dashboard-cluster-total
+  labels:
+    app: grafana
+    monitoring-key: openshift
+spec:
+  # No datasource input is needed for these dashboards
+  configMapRef:
+    name: grafana-dashboard-cluster-total
+    key: cluster-total.json
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-dashboard-etcd
+  labels:
+    app: grafana
+    monitoring-key: openshift
+spec:
+  configMapRef:
+    name: grafana-dashboard-etcd
+    key: etcd.json
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-dashboard-k8s-resources-cluster
+  labels:
+    app: grafana
+    monitoring-key: openshift
+spec:
+  configMapRef:
+    name: grafana-dashboard-k8s-resources-cluster
+    key: k8s-resources-cluster.json
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-dashboard-k8s-resources-namespace
+  labels:
+    app: grafana
+    monitoring-key: openshift
+spec:
+  configMapRef:
+    name: grafana-dashboard-k8s-resources-namespace
+    key: k8s-resources-namespace.json
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-dashboard-k8s-resources-node
+  labels:
+    app: grafana
+    monitoring-key: openshift
+spec:
+  configMapRef:
+    name: grafana-dashboard-k8s-resources-node
+    key: k8s-resources-node.json
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-dashboard-k8s-resources-pod
+  labels:
+    app: grafana
+    monitoring-key: openshift
+spec:
+  configMapRef:
+    name: grafana-dashboard-k8s-resources-pod
+    key: k8s-resources-pod.json
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-dashboard-k8s-resources-workload
+  labels:
+    app: grafana
+    monitoring-key: openshift
+spec:
+  configMapRef:
+    name: grafana-dashboard-k8s-resources-workload
+    key: k8s-resources-workload.json
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-dashboard-k8s-resources-workloads-namespace
+  labels:
+    app: grafana
+    monitoring-key: openshift
+spec:
+  configMapRef:
+    name: grafana-dashboard-k8s-resources-workloads-namespace
+    key: k8s-resources-workloads-namespace.json
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-dashboard-namespace-by-pod
+  labels:
+    app: grafana
+    monitoring-key: openshift
+spec:
+  configMapRef:
+    name: grafana-dashboard-namespace-by-pod
+    key: namespace-by-pod.json
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-dashboard-node-cluster-rsrc-use
+  labels:
+    app: grafana
+    monitoring-key: openshift
+spec:
+  configMapRef:
+    name: grafana-dashboard-node-cluster-rsrc-use
+    key: node-cluster-rsrc-use.json
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-dashboard-node-rsrc-use
+  labels:
+    app: grafana
+    monitoring-key: openshift
+spec:
+  configMapRef:
+    name: grafana-dashboard-node-rsrc-use
+    key: node-rsrc-use.json
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-dashboard-pod-total
+  labels:
+    app: grafana
+    monitoring-key: openshift
+spec:
+  configMapRef:
+    name: grafana-dashboard-pod-total
+    key: pod-total.json
+---
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: grafana-dashboard-prometheus
+  labels:
+    app: grafana
+    monitoring-key: openshift
+spec:
+  configMapRef:
+    name: grafana-dashboard-prometheus
+    key: prometheus.json
+---

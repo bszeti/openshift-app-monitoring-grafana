@@ -6,6 +6,7 @@ namespace: grafana-monitoring
 resources:
 - ../../base/grafana/instance
 - ../../base/grafana/dashboards
+- ../../base/grafana/dashboards-openshift
 
 patches:
 - target:
@@ -23,3 +24,6 @@ patches:
     - op: add
       path: /spec/containers/0/args/-
       value: '-openshift-sar={"resource": "namespaces", "verb": "get"}'
+    - op: add
+      path: /spec/containers/0/args/-
+      value: '-openshift-delegate-urls={"/": {"resource": "namespaces", "verb": "get"}}'

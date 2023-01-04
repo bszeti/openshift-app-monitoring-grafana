@@ -10,6 +10,7 @@ configMapGenerator:
   - dashboard-artemis.json
   - dashboard-jmx.json
   - dashboard-sso.json
+
 generatorOptions:
   disableNameSuffixHash: true
   

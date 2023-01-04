@@ -12,7 +12,8 @@ spec:
       jsonData:
         # customQueryParameters: namespace=mynamespace
         httpHeaderName1: Authorization
-        timeInterval: 5s
+        # required for queries with $__rate_interval
+        timeInterval: 15s
         tlsSkipVerify: true
       name: Prometheus
       secureJsonData:

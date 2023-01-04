@@ -1,0 +1,13 @@
+= OpenShift dashboards
+
+These Grafana dashboards were copied from source of https://github.com/openshift/cluster-monitoring-operator/blob/release-4.10/assets/grafana/dashboard-definitions.yaml[cluster-monitoring-operator]. 
+
+* Namespace, labels and annotations were removed from the ConfigMaps as they are not relevant outside the context of an OpenShift distribution.
+* `dashboards-ocp410.yaml` is for OpenShift v4.10, while `dashboards-ocp410.yaml` is for OpenShift v4.11
+** The only one line difference is using `cluster:node_cpu:ratio_rate5m` in _grafana-dashboard-k8s-resources-cluster_
+* These dashboards are no longer maintained after OpenShift v4.11, so additional work is needed to make them work on newer versions
+
+The dashboards work fine deployed to the cluster scoped Grafana instance to visualize standard OpenShift "infra" metrics
+
+* Some dashboards also work in namespace scoped Grafana. 
+** Remove existing `namespace=~` filters to avoid "Bad Request".
