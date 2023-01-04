@@ -7,9 +7,11 @@ resources:
   # - grafana-readonly.yaml
   - grafana-admin.yaml
   - grafana-datasource.yaml
+  ## OCP 4.11
   - datasource-setup-job.yaml
-
+  ## OCP 4.10
+  # - datasource-setup-jobonly.yaml
 configMapGenerator:
   - name: datasource-setup-script
     files:
-      - script.sh
+      - sa-token-datasource-patch.sh
