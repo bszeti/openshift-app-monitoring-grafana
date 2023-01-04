@@ -14,7 +14,7 @@ spec:
         - name: setup-scripts
           image: image-registry.openshift-image-registry.svc:5000/openshift/cli
           args:
-            - /script/setup.sh
+            -  /script/sa-token-datasource-patch.sh
           resources:
             limits:
               memory: "128Mi"
