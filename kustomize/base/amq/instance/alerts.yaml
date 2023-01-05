@@ -9,7 +9,7 @@ spec:
       # interval: 15s
       rules:
         - alert: ArtemisMessageCountSum
-          expr: sum by (pod) (artemis_message_count) > 0
+          expr: sum by (pod) (artemis_message_count) > 10
           for: 1m
           labels:
             # namespace is automatically added
