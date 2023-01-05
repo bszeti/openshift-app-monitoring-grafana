@@ -5,7 +5,8 @@ metadata:
   name: alert-notifications
 spec:
   route:
-    # Default receiver is required - causes error in prometheus-operator. It's also the receiver for sub-routes if it's not overwritten.
+    # Default receiver is required - causes error in prometheus-operator. 
+    # It's also the receiver for sub-routes if it's not overwritten.
     receiver: default
     # Wait before sending first
     # groupWait: 30s
@@ -35,12 +36,15 @@ spec:
     - name: default
       webhookConfigs:
         # https://requestbin.com/r/enixp86lo2g2/
-        - url: https://enixp86lo2g2.x.pipedream.net/
+        # - url: https://enixp86lo2g2.x.pipedream.net/
+        - url: http://http-https-echo.team-b.svc:8080/default
     - name: sub1
       webhookConfigs:
         # https://requestbin.com/r/enflqc06gmfu8
-        - url: https://enflqc06gmfu8.x.pipedream.net/
+        # - url: https://enflqc06gmfu8.x.pipedream.net/
+        - url: http://http-https-echo.team-b.svc:8080/sub1
     - name: sub2
       webhookConfigs:
         # https://requestbin.com/r/enfiu0plafpkq
-        - url: https://enfiu0plafpkq.x.pipedream.net/
+        # - url: https://enfiu0plafpkq.x.pipedream.net/
+        - url: http://http-https-echo.team-b.svc:8080/sub2

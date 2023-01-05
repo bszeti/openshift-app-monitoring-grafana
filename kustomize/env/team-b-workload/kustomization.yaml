@@ -8,7 +8,6 @@ resources:
 - ../../base/sso/instance
 - ../../base/grafana/instance
 - ../../base/grafana/dashboards
-- alertmanagerconfig.yaml
 
 patches:
 - target:

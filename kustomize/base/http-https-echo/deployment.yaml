@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-https-echo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-https-echo
+  template:
+    metadata:
+      labels:
+        app: http-https-echo
+    spec:
+      containers:
+      - name: main
+        image: mendhak/http-https-echo:28
+        env:
+        - name: ECHO_BACK_TO_CLIENT
+          value: "false"  

@@ -10,7 +10,7 @@ spec:
   adminUser: admin
   adminPassword: admin
   acceptors:
-    - name: ssl
+    - name: main
       # expose: true
       port: 61617
       protocols: amqp,core

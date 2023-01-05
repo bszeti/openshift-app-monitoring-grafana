@@ -1,4 +1,5 @@
 # How to send notifications
+# OpenShift 4.10
 apiVersion: monitoring.coreos.com/v1alpha1
 # OpenShift 4.11
 # apiVersion: monitoring.coreos.com/v1beta1
@@ -20,5 +21,7 @@ spec:
   receivers:
   - name: default
     webhookConfigs:
+    # Alertmanager is calling from the uer-workload-monitoring-namespace (or openshift-monitoring), so we need to use the full service domain name
+    - url: http://http-https-echo.team-a.svc:8080/
     # https://requestbin.com/r/enixp86lo2g2/2HFTeVekRSAlrJtkNKKN8r4o7Kp
-    - url: https://enixp86lo2g2.x.pipedream.net/
+    # - url: https://enixp86lo2g2.x.pipedream.net/

@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+# OpenShift v4.10 uses the same Alertmanager as default alerts
+- cluster-monitoring-config.yaml
+# In OpenShift v4.11 we should rather use a separate Alertmanager for user-defined alerts
+# - user-workload-monitoring-config.yaml
+

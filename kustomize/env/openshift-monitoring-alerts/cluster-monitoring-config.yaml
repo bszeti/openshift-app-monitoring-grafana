@@ -6,13 +6,7 @@ metadata:
 data:
   config.yaml: |
     enableUserWorkload: true
-    # Parameters for default prometheus
     prometheusK8s:
       retention: 24h
-      # volumeClaimTemplate:
-      #   spec:
-      #     resources:
-      #       requests:
-      #         storage: 5Gi
     alertmanagerMain:
       enableUserAlertmanagerConfig: true
