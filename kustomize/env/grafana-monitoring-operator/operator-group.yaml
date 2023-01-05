@@ -4,4 +4,4 @@ metadata:
   name: self
 spec:
   targetNamespaces:
-  - grafana-monitoring
+    - grafana-monitoring

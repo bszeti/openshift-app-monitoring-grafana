@@ -1,0 +1,83 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: datasource-setup-cronjob
+spec:
+  schedule: "0 */12 * * *"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    metadata:
+      generateName: datasource-setup-
+    spec:
+      parallelism: 1
+      completions: 1
+      suspend: false
+      template:
+        spec:
+          serviceAccountName: grafana-thanos
+          restartPolicy: Never
+          containers:
+            - name: datasource-setup-script
+              image: image-registry.openshift-image-registry.svc:5000/openshift/cli
+              args:
+                - /script/sa-token-datasource-patch.sh
+              resources:
+                limits:
+                  memory: "128Mi"
+                  cpu: "500m"
+              volumeMounts:
+                - mountPath: /script
+                  name: script-cm
+                - mountPath: /var/run/secrets/tokens
+                  name: thanos-token
+          volumes:
+            - name: script-cm
+              configMap:
+                defaultMode: 0777
+                name: datasource-setup-script
+            - name: thanos-token
+              projected:
+                sources:
+                  - serviceAccountToken:
+                      path: thanos-token
+                      expirationSeconds: 86400
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: grafana-setup-
+spec:
+  parallelism: 1
+  completions: 1
+  suspend: false
+  template:
+    spec:
+      serviceAccountName: grafana-thanos
+      restartPolicy: Never
+      containers:
+        - name: setup-scripts
+          image: image-registry.openshift-image-registry.svc:5000/openshift/cli
+          args:
+            - /script/sa-token-datasource-patch.sh
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          volumeMounts:
+            - mountPath: /script
+              name: script-cm
+            - mountPath: /var/run/secrets/tokens
+              name: thanos-token
+      volumes:
+        - name: script-cm
+          configMap:
+            defaultMode: 0777
+            name: setup-scripts
+        - name: thanos-token
+          projected:
+            sources:
+              - serviceAccountToken:
+                  path: thanos-token
+                  expirationSeconds: 86400
