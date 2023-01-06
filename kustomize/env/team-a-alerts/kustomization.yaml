@@ -5,4 +5,5 @@ namespace: team-a
 
 resources:
 - ../../base/http-https-echo
+- smtp-auth.yaml
 - alertmanagerconfig.yaml

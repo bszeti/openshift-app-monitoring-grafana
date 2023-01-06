@@ -8,6 +8,7 @@ data:
     enableUserWorkload: true
     # Parameters for default prometheus
     prometheusK8s:
+      # retention: 15d
       retention: 24h
       # volumeClaimTemplate:
       #   spec:

@@ -25,3 +25,26 @@ spec:
     - url: http://http-https-echo.team-a.svc:8080/
     # https://requestbin.com/r/enixp86lo2g2/2HFTeVekRSAlrJtkNKKN8r4o7Kp
     # - url: https://enixp86lo2g2.x.pipedream.net/
+---
+# Email alert
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: alert-notifications-email
+spec:
+  route:
+    receiver: default
+    groupWait: 5s
+    groupInterval: 30s
+    repeatInterval: 15m
+  receivers:
+  - name: default
+    emailConfigs:
+      - to: "balazs.szeti.test@gmail.com"
+        from: "balazs.szeti.test@gmail.com"
+        smarthost: "smtp.gmail.com:587"
+        authUsername: "balazs.szeti.test@gmail.com"
+        authPassword:
+          name: smtp-auth
+          key: password
+        authIdentity: "balazs.szeti.test@gmail.com"

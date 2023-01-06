@@ -1,3 +1,4 @@
+# In OpenShift 4.10 you can't use a separate Alertmanager for user-defined alerts, so we enable "alertmanagerMain" in this CM instead.
 apiVersion: v1
 kind: ConfigMap
 metadata:
