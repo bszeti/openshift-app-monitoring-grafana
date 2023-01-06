@@ -9,11 +9,11 @@ data:
     # Parameters for default prometheus
     prometheusK8s:
       # retention: 15d
-      retention: 24h
+      # retentionSize: 90GB
       # volumeClaimTemplate:
       #   spec:
       #     resources:
       #       requests:
-      #         storage: 5Gi
+      #         storage: 100Gi
     alertmanagerMain:
       enableUserAlertmanagerConfig: true

@@ -26,6 +26,6 @@ spec:
             app: amq
           annotations:
             summary: Messages on {{ $labels.queue }} queue
-            description: Broker {{ $labels.pod }} - Messages on {{ $labels.queue }}
+            description: Broker {{ $labels.namespace }}/{{ $labels.pod }} - Messages on {{ $labels.queue }}
             message: Messages count on {{ $labels.queue }} is {{ $value }}
 

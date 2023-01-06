@@ -8,6 +8,5 @@ data:
   config.yaml: |
     enableUserWorkload: true
     prometheusK8s:
-      retention: 24h
     alertmanagerMain:
       enableUserAlertmanagerConfig: true

@@ -6,25 +6,28 @@ metadata:
 data:
   config.yaml: |
     prometheus:
-      retention: 12h
-      # resources:
-      #   requests:
-      #     cpu: 100m
-      #     memory: 200Mi
-      #   limits:
-      #     cpu: "1"
-      #     memory: 1Gi
     thanosRuler:
-      retention: 1d
+      # retention: 24h
       # resources:
       #   requests:
-      #     cpu: 50m
-      #     memory: 100Mi
-      #   limits:
-      #     cpu: "1"
-      #     memory: 1Gi
+      #     cpu: 1m
+      #     memory: 21Mi
+      # volumeClaimTemplate:
+      #   spec:
+      #     resources:
+      #       requests:
+      #         storage: 3Gi
     # Instead of using the default alertmanagerMain in cluster-monitoring-config, we use this separate Alertmanager
-    # to avoid sending user-defined alerts through the default notification route
+    # to avoid sending user-defined alerts through the default notification channels
     alertmanager:
       enabled: true
       enableAlertmanagerConfig: true
+      # resources:
+      #   requests:
+      #     cpu: 4m
+      #     memory: 40Mi
+      # volumeClaimTemplate:
+      #   spec:
+      #     resources:
+      #       requests:
+      #         storage: 3Gi

@@ -6,30 +6,15 @@ metadata:
 data:
   config.yaml: |
     prometheus:
-      retention: 12h
-      resources:
-        requests:
-          cpu: 100m
-          memory: 200Mi
-        limits:
-          cpu: "1"
-          memory: 1Gi
+      # retention: 24h
+      # retentionSize: 9GB
+      # resources:
+      #   requests:
+      #     cpu: 6m
+      #     memory: 30Mi
       # volumeClaimTemplate:
       #   spec:
       #     resources:
       #       requests:
-      #         storage: 5Gi
-    thanosRuler:
-      retention: 1d
-      resources:
-        requests:
-          cpu: 50m
-          memory: 100Mi
-        limits:
-          cpu: "1"
-          memory: 1Gi
-      # volumeClaimTemplate:
-      #   spec:
-      #     resources:
-      #       requests:
-      #         storage: 3Gi
+      #         storage: 10Gi
+    
