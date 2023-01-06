@@ -12,7 +12,7 @@ spec:
       jsonData:
         # customQueryParameters: namespace=mynamespace
         httpHeaderName1: Authorization
-        # required for queries with $__rate_interval
+        # timeInterval is required for queries with $__rate_interval, it should be set to the usual scrape time in Prometheus
         timeInterval: 15s
         tlsSkipVerify: true
       name: Prometheus
