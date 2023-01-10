@@ -66,6 +66,8 @@ oc apply -k kustomize/env/team-a-alerts
 # Send message to DLQ to trigger alert
 while ! oc wait -n team-a --for condition=Ready --timeout=180s pod/broker-ss-0; do sleep 1; done
 oc exec -n team-a broker-ss-0 -- sh -c '/home/jboss/amq-broker/bin/artemis producer --message-count 1 --destination DLQ --url tcp://$(hostname):61617 --user admin --password admin'
+while ! oc wait -n team-a --for condition=Ready --timeout=180s pod/broker-ss-1; do sleep 1; done
+oc exec -n team-a broker-ss-1 -- sh -c '/home/jboss/amq-broker/bin/artemis producer --message-count 1 --destination DLQ --url tcp://$(hostname):61617 --user admin --password admin'
 
 # Optional: Switch to user2
 

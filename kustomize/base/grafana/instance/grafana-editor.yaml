@@ -3,7 +3,6 @@ kind: Grafana
 metadata:
   name: grafana
 spec:
-  # baseImage: docker.io/grafana/grafana:8.5.15
   config:
     log:
       mode: "console"
@@ -21,7 +20,7 @@ spec:
       header_name: X-Forwarded-User
       headers: 'Email:X-Forwarded-Email '
     users:
-      auto_assign_org_role: Admin
+      auto_assign_org_role: Editor
   containers:
     - args:
         - '-provider=openshift'
@@ -42,7 +41,6 @@ spec:
         - '-openshift-ca=/etc/grafana-configmaps/ocp-injected-certs/ca-bundle.crt'
         - '-skip-auth-regex=^/metrics'
       image: 'quay.io/openshift/origin-oauth-proxy:4.10'
-      # image: 'quay.io/openshift/origin-oauth-proxy:4.11'
       name: grafana-proxy
       ports:
         - containerPort: 9091
