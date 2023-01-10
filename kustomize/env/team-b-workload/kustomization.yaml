@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: team-b
 
 resources:
+- grafana-rolebinding.yaml
 - ../../base/amq/instance
 - ../../base/sso/instance
 - ../../base/grafana/instance

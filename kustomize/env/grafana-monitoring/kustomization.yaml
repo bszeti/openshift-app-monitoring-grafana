@@ -4,6 +4,8 @@ kind: Kustomization
 namespace: grafana-monitoring
 
 resources:
+- namespace.yaml
+- grafana-cluster-monitoring-view.yaml
 - ../../base/grafana/instance
 - ../../base/grafana/dashboards
 - ../../base/grafana/dashboards-openshift

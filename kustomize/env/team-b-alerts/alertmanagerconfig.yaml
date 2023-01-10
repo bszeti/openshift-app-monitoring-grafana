@@ -1,5 +1,8 @@
 # How to send notifications
+# OpenShift 4.10
 apiVersion: monitoring.coreos.com/v1alpha1
+# OpenShift 4.11
+# apiVersion: monitoring.coreos.com/v1beta1
 kind: AlertmanagerConfig
 metadata:
   name: alert-notifications

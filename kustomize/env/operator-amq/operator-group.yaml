@@ -1,7 +1,6 @@
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
-  name: self
+  name: cluster-scoped
 spec:
-  targetNamespaces:
-  - grafana-monitoring
+  
