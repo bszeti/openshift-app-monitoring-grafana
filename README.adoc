@@ -211,3 +211,12 @@ ClusterRole `alert-routing-edit` is required in the namespace to create _Alertma
 === Separate Alertmanager for user-defined alerts
 
 For additional separation of alert notifications coming from _User_ and _Platform_ alerts, a https://docs.openshift.com/container-platform/4.11/monitoring/enabling-alert-routing-for-user-defined-projects.html#enabling-a-separate-alertmanager-instance-for-user-defined-alert-routing_enabling-alert-routing-for-user-defined-projects[separate Alertmanager instance] can be deployed in the `openshift-user-workload-monitoring` namespace. This is a good practice to handle configuration problems, performance issues or to separate access control.
+
+== OpenShift 4.10 v 4.11 differences
+
+Files to check:
+
+* Separate Alertmanager in link:kustomize/env/openshift-monitoring-alerts/kustomization.yaml[]
+* OAuth proxy for Grafana in link:kustomize/base/grafana/instance/grafana-admin.yaml[]
+* API version in link:kustomize/env/team-a-alerts/alertmanagerconfig.yaml[] and link:kustomize/env/team-b-alerts/alertmanagerconfig.yaml[]
+* OpenShift dashboards in link:kustomize/base/grafana/dashboards-openshift/kustomization.yaml[]
