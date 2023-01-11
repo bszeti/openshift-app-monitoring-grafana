@@ -6,6 +6,6 @@ resources:
 - ocp-injected-certs.yaml
 # - grafana-readonly.yaml
 - grafana-admin.yaml
-- grafana-datasource.yaml
+- datasource.yaml
 
   
