@@ -4,8 +4,9 @@ kind: Kustomization
 resources:
 - session-secret.yaml
 - ocp-injected-certs.yaml
-# - grafana-readonly.yaml
 - grafana-admin.yaml
+# - grafana-editor.yaml
+# - grafana-readonly.yaml
 - datasource.yaml
 
   

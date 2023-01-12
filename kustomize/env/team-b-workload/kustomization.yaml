@@ -31,6 +31,3 @@ patches:
     - op: add
       path: /spec/containers/0/args/-
       value: '-openshift-sar={"resource": "services", "verb": "get", "namespace":"team-b"}'
-    - op: add
-      path: /spec/containers/0/args/-
-      value: '-openshift-delegate-urls={"/": {"resource": "services", "verb": "get", "namespace":"team-b"}}'
