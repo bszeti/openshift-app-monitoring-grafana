@@ -36,31 +36,35 @@ curl -vk 'https://prometheus-user-workload.openshift-user-workload-monitoring.sv
 
 === Deploy a cluster-scoped Grafana
 
-Deploy a Grafana in `grafana-monitoring` namespace. Create a _ServiceAccount_ (`grafana-thanos`) that has cluster-scoped `cluster-monitoring-view` permission (_ClusterRoleBinding_) and add its token as `Bearer` header in the _GrafanaDatasource_.
+Deploy a Grafana in `grafana-monitoring` namespace. Create a _ServiceAccount_ (`grafana-thanos`) that has cluster-scoped `cluster-monitoring-view` permission (_ClusterRoleBinding_) and add its token as `Bearer` auth header in the _GrafanaDatasource_.
 
 ```
 oc apply -k kustomize/env/grafana-monitoring-operator
 
-SATOKEN=`oc sa get-token grafana-thanos -n grafana-monitoring`
+SATOKEN=`oc extract secret/grafana-thanos-token -n grafana-monitoring --keys=token --to=-`
 sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/grafana-monitoring/kustomization.yaml
 oc apply -k kustomize/env/grafana-monitoring
 ```
 
 [NOTE]
-In OpenShift v4.11 `oc get-token` is deprected. Use `oc create token grafana-thanos --duration=9000h -n grafana-monitoring`  or `oc extract -n grafana-monitoring $(oc get secret -oname -n grafana-monitoring | grep grafana-thanos-token) --keys=token --to=-`
+In OpenShift v4.11 `oc sa get-token` is deprecated, `oc create token grafana-thanos` creates temporary tokens only. Create long-lived token Secret manually using the `kubernetes.io/service-account.name` annotation.
 
 Note:
 
-- This _GrafanaDatasource_ connects to endpoint `thanos-querier.openshift-monitoring.svc.cluster.local` on port *9091*, that requires cluster-scoped `cluster-monitoring-view` permission (for the _ServiceAccount_)
+- This _GrafanaDatasource_ connects to endpoint `thanos-querier.openshift-monitoring.svc` on port *9091*, that requires cluster-scoped `cluster-monitoring-view` permission (for the _ServiceAccount_)
 - The _ServiceAccount_ token is added in _GrafanaDatasource_ as:
   
   ```
+    jsonData:
+      httpHeaderName1: Authorization
     secureJsonData:
-      httpHeaderValue1: >-
-        Bearer [use grafana-thanos token]
+      httpHeaderValue1: Bearer [use grafana-thanos token]
   ```
 
 - Access to Grafana UI requires cluster scoped permission by setting `-openshift-sar={"resource": "namespaces", "verb": "get"}`. This could be less restrictive and changed to let login anyone with access to the `grafana-monitoring` namespace by setting something like `-openshift-sar={"resource": "services", "verb": "get", "namespace":"grafana-monitoring"}`
+
+[NOTE]
+Make sure you use the `origin-oauth-proxy` image matching the cluster version
 
 === Deploy team specific namespaces
 
@@ -79,7 +83,7 @@ Deploy Grafana and our applications to monitor (using Red Hat SSO and AMQ Broker
 ```
 oc apply -k kustomize/env/team-a-operators
 
-SATOKEN=`oc sa get-token grafana-thanos -n team-a`
+SATOKEN=`oc extract secret/grafana-thanos-token -n team-a --keys=token --to=-`
 sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/team-a-workload/kustomization.yaml
 oc apply -k kustomize/env/team-a-workload
 ```
@@ -89,16 +93,16 @@ And similarly for `team-b`:
 ```
 oc apply -k kustomize/env/team-b-operators
 
-SATOKEN=`oc sa get-token grafana-thanos -n team-b`
+SATOKEN=`oc extract secret/grafana-thanos-token -n team-b --keys=token --to=-`
 sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/team-b-workload/kustomization.yaml
 oc apply -k kustomize/env/team-b-workload
 ```
 
 Note:
 
-- These _GrafanaDatasources_ connect to endpoint `thanos-querier.openshift-monitoring.svc.cluster.local` on port *9092*, that requires only namespace scoped permission (for the _ServiceAccount_)
-- But this endpoint also requires a matching `namespace=team-a` criteria in every Promtheus query and lookup, so we need to add `customQueryParameters: namespace=team-a`, so it's automatically added to the sent queries. (Though we actually have "namespace" filter in our queries used on the dashboards in this example)
+- These _GrafanaDatasources_ connect to endpoint `thanos-querier.openshift-monitoring.svc` on port *9092*
 - The `Bearer` token used belongs to the _ServiceAccount_ having only namespace scoped `view` permission (_RoleBinding_)
+- This endpoint requires a matching `namespace=team-a` parameter, so we need to add `customQueryParameters: namespace=team-a`, so it's automatically added to the sent queries. (Though we have "namespace" filter in our queries used on the dashboards in this example)
 - Grafana UI requires only namespace scoped access to login: `-openshift-sar={"resource": "services", "verb": "get", "namespace":"team-a"}`
 
 [NOTE]
@@ -121,9 +125,9 @@ Related blog: https://cloud.redhat.com/blog/thanos-querier-versus-thanos-querier
 To see the difference between the thanos-querier endpoints on port 9091 and 9092 we can run some curl commands. Port 9091 is exposed by a Route, for 9092 we can do port-forward:
 
 ```
-BEARER_CLUSTER="$(oc sa get-token -n grafana-monitoring grafana-thanos)"
-BEARER_TEAMA="$(oc sa get-token -n team-a grafana-thanos)"
-BEARER_TEAMB="$(oc sa get-token -n team-b grafana-thanos)"
+BEARER_CLUSTER="$(oc extract secret/grafana-thanos-token -n grafana-monitoring --keys=token --to=-)"
+BEARER_TEAMA="$(oc extract secret/grafana-thanos-token -n team-a --keys=token --to=-)"
+BEARER_TEAMB="$(oc extract secret/grafana-thanos-token -n team-b --keys=token --to=-)"
 
 # Cluster scoped endpoint
 curl -vk -H "Authorization: Bearer $BEARER_CLUSTER" 'https://thanos-querier-openshift-monitoring.apps.[cluster domain]/api/v1/query?query=up'
@@ -138,8 +142,7 @@ Instead of a _ServiceAccount_ token we can also use our own user token (`oc whoa
 
 == Alerting
 
-[pass]
-The alerting related configuration was actually deployed by the scripts we run above, but this section describes the details around our custom alerts.
+
 
 === Alerting Rules
 
@@ -155,9 +158,9 @@ For details about rules see https://docs.openshift.com/container-platform/4.11/r
 
 
 [NOTE]
-The `namespace` filter is automatically added to all metrics used in the expressions, which makes the _PrometheusRule_ resources usable in any namespaces, alerts will be based only on metrics coming from that namespace. The `namespace` (and `alertname`) label is also automatically added to the alerts when they fire, so alerts can be grouped by namespace for receivers.
+The `namespace` filter is automatically added to all metrics used in the expressions, which makes the _PrometheusRule_ resources usable in any namespaces, alerts will be based only on metrics coming from that namespace. The `namespace` (and `alertname`) label is also automatically added to the alerts when they fire.
 
-ClusterRole `monitoring-edit` or `monitoring-rules-edit` is required in the namespace to create _PrometheusRules_. 
+Role `monitoring-edit` or `monitoring-rules-edit` is required in the namespace to create _PrometheusRules_. 
 
 === Notifications
 
@@ -165,7 +168,7 @@ Receivers for the standard platform alerts can be configured using the https://d
 
 While the _User_ alerts are also included in the _Default_ alert notifications, it's not practical to send _User_ alerts (relevant to application teams) to the same channels as _Platform_ alerts (relevant for cluster admins). Fortunately we can define custom, namespace scoped https://docs.openshift.com/container-platform/4.11/monitoring/managing-alerts.html#creating-alert-routing-for-user-defined-projects_managing-alerts[alert notification routes] by creating `AlertmanagerConfigs`.
 
-We need to enable this custom alerting feature by adding `enableUserAlertmanagerConfig: true` to `cluster-monitoring-config` ConfigMap:
+We need to enable this custom alerting feature by adding `enableUserAlertmanagerConfig: true` to `cluster-monitoring-config` ConfigMap (for OpenShift v4.11+ see <<Separate Alertmanager for user-defined alerts>>):
 
 ```
   config.yaml: |
@@ -210,7 +213,41 @@ ClusterRole `alert-routing-edit` is required in the namespace to create _Alertma
 
 === Separate Alertmanager for user-defined alerts
 
-For additional separation of alert notifications coming from _User_ and _Platform_ alerts, a https://docs.openshift.com/container-platform/4.11/monitoring/enabling-alert-routing-for-user-defined-projects.html#enabling-a-separate-alertmanager-instance-for-user-defined-alert-routing_enabling-alert-routing-for-user-defined-projects[separate Alertmanager instance] can be deployed in the `openshift-user-workload-monitoring` namespace. This is a good practice to handle configuration problems, performance issues or to separate access control.
+In OpenShift v4.11+ a https://docs.openshift.com/container-platform/4.11/monitoring/enabling-alert-routing-for-user-defined-projects.html#enabling-a-separate-alertmanager-instance-for-user-defined-alert-routing_enabling-alert-routing-for-user-defined-projects[separate Alertmanager instance] can be deployed in the `openshift-user-workload-monitoring` namespace to separate notifications coming from _User_ and _Platform_ alerts. This is a good practice to avoid _User_ alerts being sent through the _Platfom_ notification routes accidentally if _AlertmanagerConfigs_ were not created in a namespace.
+
+Enable in `user-workload-monitoring-config` _ConfigMap_ (instead of `cluster-monitoring-config`):
+
+```
+  config.yaml: |
+    ...
+    alertmanager:
+      enabled: true
+      enableAlertmanagerConfig: true
+```
+
+=== Test alerting
+
+_PrometheusRules_ were already deployed in the previous steps and they visible under _Observe_ in the OpenShift UI.
+
+Setup custom alert notifications:
+
+```
+# Enable alert routing for user-defined alerts
+oc apply -k kustomize/env/openshift-monitoring-alerts
+# Team-a - [Optional: Switch to user1]
+oc apply -k kustomize/env/team-a-alerts
+# Team-b - [Optional: Switch to user2]
+oc apply -k kustomize/env/team-b-alerts
+```
+
+
+Send message to DLQ to trigger alerts:
+```
+oc exec -n team-a broker-ss-0 -- sh -c '/home/jboss/amq-broker/bin/artemis producer --message-count 1 --destination DLQ --url tcp://$(hostname):61617 --user admin --password admin'
+oc exec -n team-a broker-ss-1 -- sh -c '/home/jboss/amq-broker/bin/artemis producer --message-count 1 --destination DLQ --url tcp://$(hostname):61617 --user admin --password admin'
+oc exec -n team-b broker-ss-0 -- sh -c '/home/jboss/amq-broker/bin/artemis producer --message-count 1 --destination DLQ --url tcp://$(hostname):61617 --user admin --password admin'
+
+```
 
 == OpenShift 4.10 v 4.11 differences
 
