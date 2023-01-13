@@ -6,7 +6,7 @@ namespace: grafana-monitoring
 resources:
 - ../../base/grafana/instance
 - ../../base/grafana/dashboards
-- ../../base/grafana/dashboards-openshift
+# - ../../base/grafana/dashboards-openshift
 
 patches:
 - target:

@@ -6,8 +6,8 @@ metadata:
 data:
   config.yaml: |
     prometheus:
-      # retention: 24h
-      # retentionSize: 9GB
+      # retention: 1d
+      # retentionSize: 4GB
       # resources:
       #   requests:
       #     cpu: 6m
@@ -16,5 +16,5 @@ data:
       #   spec:
       #     resources:
       #       requests:
-      #         storage: 10Gi
+      #         storage: 5Gi
     
