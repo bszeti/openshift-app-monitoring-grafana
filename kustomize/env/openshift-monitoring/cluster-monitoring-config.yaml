@@ -6,7 +6,7 @@ metadata:
 data:
   config.yaml: |
     enableUserWorkload: true
-    # Parameters for default prometheus
+    # Parameters for Platform prometheus
     prometheusK8s:
       # retention: 15d
       # retentionSize: 90GB
@@ -15,5 +15,3 @@ data:
       #     resources:
       #       requests:
       #         storage: 100Gi
-    alertmanagerMain:
-      enableUserAlertmanagerConfig: true
