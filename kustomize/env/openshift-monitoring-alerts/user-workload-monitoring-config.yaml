@@ -17,8 +17,9 @@ data:
       #     resources:
       #       requests:
       #         storage: 3Gi
-    # Instead of using the default alertmanagerMain in cluster-monitoring-config, we use this separate Alertmanager
-    # to avoid sending user-defined alerts through the default notification channels
+    # We use this separate Alertmanager
+    # to avoid sending user-defined alerts
+    # through the default notification channels
     alertmanager:
       enabled: true
       enableAlertmanagerConfig: true
