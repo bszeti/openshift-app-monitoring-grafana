@@ -9,6 +9,8 @@ while ! oc wait --for condition=established crd/grafanas.integreatly.org; do sle
 
 # Create Grafana instance in grafana-monitoring namespace
 SATOKEN=`oc extract secret/grafana-thanos-token -n grafana-monitoring --keys=token --to=-`
+# Also can get token from auto-created SA Secret:
+# SASECRET=$(oc get secret -o jsonpath='{.items[?(@.metadata.annotations.kubernetes\.io/service-account\.name=="grafana-thanos")].metadata.name}' --field-selector type=="kubernetes.io/service-account-token")
 sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/grafana-monitoring/kustomization.yaml
 # Could also patch DataSource afterwards intead of "sed"
 # oc patch GrafanaDataSource thanos --type=json -p='[{"op":"replace","path": "/spec/datasources/0/secureJsonData/httpHeaderValue1", "value": "'"Bearer $SATOKEN"'" }]'
