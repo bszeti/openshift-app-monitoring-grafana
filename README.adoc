@@ -43,6 +43,7 @@ oc apply -k kustomize/env/grafana-monitoring-operator
 
 SATOKEN=`oc extract secret/grafana-thanos-token -n grafana-monitoring --keys=token --to=-`
 sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/grafana-monitoring/kustomization.yaml
+
 oc apply -k kustomize/env/grafana-monitoring
 ```
 
@@ -85,6 +86,7 @@ oc apply -k kustomize/env/team-a-operators
 
 SATOKEN=`oc extract secret/grafana-thanos-token -n team-a --keys=token --to=-`
 sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/team-a-workload/kustomization.yaml
+
 oc apply -k kustomize/env/team-a-workload
 ```
 
@@ -95,6 +97,7 @@ oc apply -k kustomize/env/team-b-operators
 
 SATOKEN=`oc extract secret/grafana-thanos-token -n team-b --keys=token --to=-`
 sed -i '' "s/Bearer .*/Bearer $SATOKEN/" kustomize/env/team-b-workload/kustomization.yaml
+
 oc apply -k kustomize/env/team-b-workload
 ```
 
